@@ -1,0 +1,18 @@
+# Delivery delay root cause – example
+objective: "Find root causes of delivery delays and suggest fixes"
+entities:
+  - type: Order
+    id_field: order_id
+  - type: Warehouse
+    id_field: warehouse_id
+  - type: Carrier
+    id_field: carrier_id
+steps:
+  - name: extract_orders
+    description: "Pull orders, shipments, and delay events"
+  - name: build_graph
+    description: "Map to causal graph (warehouse, carrier -> delay)"
+  - name: root_cause
+    description: "Causal paths to delay outcomes"
+  - name: report
+    description: "Root cause report and recommendations"

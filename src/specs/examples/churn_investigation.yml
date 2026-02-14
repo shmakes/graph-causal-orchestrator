@@ -1,0 +1,16 @@
+# Churn investigation spec – example
+objective: "Identify drivers of customer churn and recommend interventions"
+entities:
+  - type: Customer
+    id_field: customer_id
+  - type: Product
+    id_field: product_id
+steps:
+  - name: extract_usage
+    description: "Pull usage and subscription data"
+  - name: build_graph
+    description: "Map to causal graph (usage -> churn risk)"
+  - name: causal_analysis
+    description: "Find causal paths to churn"
+  - name: report
+    description: "Produce recommendations"

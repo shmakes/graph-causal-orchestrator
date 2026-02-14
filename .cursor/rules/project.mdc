@@ -1,0 +1,13 @@
+---
+description: Graph causal orchestrator – Neo4j, causal graph, LangGraph
+globs:
+alwaysApply: true
+---
+
+# Graph Causal Orchestrator
+
+- Use Neo4j for graph storage; Cypher for queries and causal paths.
+- Causal layer: causal_kg for edges, interventions, explanations.
+- Orchestration: LangGraph workflows (single/multi-agent); optional AutoGen.
+- Specs: YAML investigation specs in specs/examples/; parser loads them into Python.
+- All code should run inside Cursor; env from .env via pydantic-settings.
