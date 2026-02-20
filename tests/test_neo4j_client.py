@@ -10,7 +10,14 @@ def test_client_init():
     assert c.user == "neo4j"
 
 
-def test_run_cypher_stub_raises():
-    c = Neo4jClient("bolt://localhost:7687", "neo4j", "secret")
-    with pytest.raises(NotImplementedError):
-        c.run_cypher("RETURN 1")
+@pytest.mark.functional
+def test_run_cypher_executes_and_returns_list():
+    from config.settings import get_settings
+    settings = get_settings()
+    client = Neo4jClient(settings.neo4j_uri, settings.neo4j_user, settings.neo4j_password)
+    try:
+        client.connect()
+        rows = client.run_cypher("RETURN 1 AS n")
+        assert rows == [{"n": 1}]
+    finally:
+        client.close()
