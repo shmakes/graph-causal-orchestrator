@@ -1,0 +1,39 @@
+# Why-aware response evaluation set
+name: why_aware_churn_eval_v1
+description: "Small fixed query set to regression-test causal answer quality."
+rubric:
+  require_causal_chain: true
+  require_intervention_option: true
+  require_uncertainty_disclosure: true
+  min_score: 0.7
+cases:
+  - id: churn_why_customer
+    query: "Why did customer 0004-TLHLJ churn?"
+    must_include_any:
+      - "cause"
+      - "because"
+      - "driven"
+    intervention_any:
+      - "intervention"
+      - "mitigate"
+      - "recommend"
+  - id: churn_why_contract
+    query: "Why is month-to-month contract associated with churn?"
+    must_include_any:
+      - "cause"
+      - "causal"
+      - "mechanism"
+    intervention_any:
+      - "offer"
+      - "discount"
+      - "intervention"
+  - id: churn_counterfactual
+    query: "What might happen to churn if we change offers for high-risk users?"
+    must_include_any:
+      - "if"
+      - "intervention"
+      - "expected"
+    intervention_any:
+      - "rank"
+      - "priority"
+      - "recommend"

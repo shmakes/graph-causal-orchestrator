@@ -20,6 +20,16 @@
       "justMyCode": false
     },
     {
+      "name": "Evaluate why-aware",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/evaluate_why_aware.py",
+      "args": ["--responses-file", "${workspaceFolder}/responses.json"],
+      "cwd": "${workspaceFolder}",
+      "env": { "PYTHONPATH": "${workspaceFolder}/src" },
+      "justMyCode": false
+    },
+    {
       "name": "Pytest: current file",
       "type": "debugpy",
       "request": "launch",
