@@ -20,6 +20,15 @@
       "justMyCode": false
     },
     {
+      "name": "Import telecom data",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/import_telecom_data.py",
+      "cwd": "${workspaceFolder}",
+      "env": { "PYTHONPATH": "${workspaceFolder}/src" },
+      "justMyCode": false
+    },
+    {
       "name": "Evaluate why-aware",
       "type": "debugpy",
       "request": "launch",
