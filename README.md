@@ -47,9 +47,18 @@ All runnable scripts currently in `scripts/`:
 The evaluation script scores model answers against a fixed rubric so that “why-aware” responses (causal chains, interventions, uncertainty) can be regression-tested.
 
 - **Eval spec:** `src/specs/examples/why_aware_eval.yml` — defines cases and required checks (causal chain, intervention mention, uncertainty disclosure).
-- **Script:** `scripts/evaluate_why_aware.py` — reads a JSON file of case id → response text and prints scores.
+- **Responses file:** `responses.json` (sample in repo root) — maps each case id to your model's answer text.
+- **Script:** `scripts/evaluate_why_aware.py` — reads the spec + responses and prints per-case and aggregate scores.
 
-Create a responses file (e.g. `responses.json`) keyed by case id from the spec:
+### How the files fit together
+
+1. `src/specs/examples/why_aware_eval.yml` defines the test cases and rubric.
+2. `responses.json` contains your generated answers for those case ids.
+3. `scripts/evaluate_why_aware.py` compares the answers to rubric keywords and outputs JSON results.
+
+### Prepare or edit `responses.json`
+
+Use the repo-root `responses.json` as a starting point, or create your own file with the same case ids:
 
 ```json
 {
@@ -65,4 +74,43 @@ Then run:
 uv run python scripts/evaluate_why_aware.py --responses-file responses.json
 ```
 
-Optional: `--eval-spec path/to/why_aware_eval.yml` to use a different rubric. Use the **Evaluate why-aware** launch configuration in VS Code to run the script under the debugger (edit `args` in `.vscode/launch.json` if your responses file is elsewhere).
+Optional:
+
+- Use a different rubric file:
+  - `uv run python scripts/evaluate_why_aware.py --eval-spec path/to/why_aware_eval.yml --responses-file responses.json`
+- Use the **Evaluate why-aware** launch configuration in VS Code (edit `args` in `.vscode/launch.json` if your responses file is elsewhere).
+
+### How to interpret results
+
+The script prints JSON like:
+
+```json
+{
+  "cases": [
+    {
+      "id": "churn_why_customer",
+      "query": "Why did customer 0004-TLHLJ churn?",
+      "score": 1.0,
+      "passed_checks": [
+        "causal_chain",
+        "intervention_option",
+        "uncertainty_disclosure"
+      ],
+      "missing_response": false
+    }
+  ],
+  "mean_score": 0.89
+}
+```
+
+- `cases`: one entry per case id from the eval spec
+  - `score`: fraction of rubric checks passed for that case (`0.0` to `1.0`)
+  - `passed_checks`: which checks were satisfied (`causal_chain`, `intervention_option`, `uncertainty_disclosure`)
+  - `missing_response`: `true` if the case id was absent from your responses file
+- `mean_score`: average of all case scores
+
+Practical reading guide:
+
+- `mean_score` close to `1.0`: responses consistently include causal reasoning, interventions, and uncertainty language.
+- Low `score` on a case: inspect `passed_checks` to see what is missing (for example, no uncertainty caveat).
+- `missing_response: true`: add that case id to `responses.json` and rerun.
